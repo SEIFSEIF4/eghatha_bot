@@ -1,39 +1,29 @@
 import { Bot } from "grammy";
-import cron from "node-cron";
+import { startPollScheduler } from "./helpers/corn/index.ts";
 
-const { BOT_TOKEN: token = "", CHANNEL_USERNAME = "-1002313808274" } =
-  process.env;
+const {
+  BOT_TOKEN: token = "7904764998:AAGYYu_fXyIsqOh4b6c8Q9HDX-jMg55oQtc",
+  CHANNEL_USERNAME = "-1002313808274",
+} = process.env;
+
+if (!token) {
+  throw new Error("BOT_TOKEN environment variable is required");
+}
 
 const bot = new Bot(token);
 
-// Middleware for handling messages
-bot.on("message", async (ctx) => {
-  try {
-    await bot.api.sendMessage(CHANNEL_USERNAME, "Hello from the bot!");
-    await bot.api.sendPoll(
-      CHANNEL_USERNAME,
-      "Daily Poll: What do you prefer?",
-      [{ text: "Option A" }, { text: "Option B" }, { text: "Option C" }],
-      { is_anonymous: true, allows_multiple_answers: true }
-    );
-  } catch (error) {
-    console.error("Failed to send scheduled poll:", error);
-  }
+// Configure poll schedules
+const setupPolls = () => {
+  startPollScheduler(bot, "daily", "* * * * *", 1 * 60 * 1000);
+  startPollScheduler(bot, "weekly", "0 17 * * 5", 7 * 24 * 60 * 60 * 1000);
+  startPollScheduler(bot, "quiz", "0 18 * * 3", 10 * 60 * 1000);
+};
+
+setupPolls();
+
+bot.start().catch((error) => {
+  console.error("Failed to start bot:", error);
+  process.exit(1);
 });
 
-cron.schedule("*/10 * * * *", async () => {
-  try {
-    await bot.api.sendPoll(
-      CHANNEL_USERNAME,
-      "Daily Poll: What do you prefer?",
-      [{ text: "Option A" }, { text: "Option B" }, { text: "Option C" }],
-      { is_anonymous: true }
-    );
-  } catch (error) {
-    console.error("Failed to send scheduled poll:", error);
-  }
-});
-
-// Start the bot
-bot.start();
-console.log("Bot started successfully.");
+console.log("Bot started successfully");

@@ -1,4 +1,4 @@
-import { bot } from "../src/bot";
+import { bot } from "../bot.ts";
 
 const {
   VERCEL_URL: host,

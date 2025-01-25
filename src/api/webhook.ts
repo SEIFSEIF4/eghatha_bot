@@ -1,4 +1,4 @@
-import { bot } from "../src/bot.ts";
+import { bot } from "../temp.ts";
 import { webhookCallback } from "grammy";
 
 export const config = { runtime: "edge" };

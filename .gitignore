@@ -60,7 +60,6 @@ env*
 
 
 
-
 # START: Project files
 
 src/config.js
@@ -69,3 +68,4 @@ src/config.js
 babel-dist
 
 # END: Project files
+temp.ts
