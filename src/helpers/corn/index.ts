@@ -1,6 +1,8 @@
 import { Bot, GrammyError } from "grammy";
 import cron, { ScheduledTask } from "node-cron";
 import { cronToHumanReadable } from "./cronToHumanReadable.ts";
+import { pollConfigurations } from "@/pollContent.ts";
+import { bot } from "@/bot.ts";
 
 const { CHANNEL_USERNAME = "-1002313808274" } = process.env;
 
@@ -8,25 +10,37 @@ const { CHANNEL_USERNAME = "-1002313808274" } = process.env;
 const pollSchedulers: { [key: string]: ScheduledTask[] } = {};
 const activePolls = new Map<string, ActivePoll[]>();
 
-type PollType = "daily" | "weekly" | "quiz";
+type PollType = "daily" | "weekly" | "quiz" | "custom";
 type ActivePoll = {
   messageId: number;
   timer: NodeJS.Timeout;
   stopTime?: number;
 };
 
-/**
- * Generates poll content dynamically.
- * Will be Replace or customize as needed.
- */
-const getPollContent = (
-  type: string
-): {
+type PollContent = {
   question: string;
   options: { text: string }[];
   isQuiz?: boolean;
   correctOptionIndex?: number;
-} => {
+};
+
+export type PollContentGenerator = (type: string) => PollContent;
+
+/**
+ * Using callback or configuration object that provides dynamic poll content
+ *
+ * @param type - The type or identifier of the poll
+ * @param contentGenerator - A callback function that generates poll content
+ */
+const getPollContent = (
+  type: string,
+  contentGenerator?: PollContentGenerator
+): PollContent => {
+  if (contentGenerator) {
+    return contentGenerator(type);
+  }
+
+  // Default content
   const now = new Date();
   const isDaily = type === "daily";
   const isQuiz = type === "quiz";
@@ -61,9 +75,10 @@ export const startPollScheduler = async (
   type: PollType,
   scheduleTime: string,
   duration?: number,
-  timeZone: string = "Europe/Istanbul"
+  timeZone: string = "Europe/Istanbul",
+  contentGenerator?: PollContentGenerator
 ): Promise<number | null> => {
-  if (!["daily", "weekly", "quiz"].includes(type)) {
+  if (!["daily", "weekly", "quiz", "custom"].includes(type)) {
     throw new Error(`Invalid poll type: '${type}'`);
   }
 
@@ -78,7 +93,7 @@ export const startPollScheduler = async (
       scheduleTime,
       async () => {
         const { question, options, isQuiz, correctOptionIndex } =
-          getPollContent(type);
+          getPollContent(type, contentGenerator);
 
         try {
           const pollMessage = await bot.api.sendPoll(
@@ -87,6 +102,7 @@ export const startPollScheduler = async (
             options,
             {
               is_anonymous: true,
+              allows_multiple_answers: isQuiz ? false : true,
               type: isQuiz ? "quiz" : "regular",
               correct_option_id: isQuiz ? correctOptionIndex : undefined,
             }
@@ -192,4 +208,91 @@ export const stopPollScheduler = (type: string, index?: number): void => {
   }
 
   console.log(`Poll scheduler(s) for '${type}' stopped.`);
+};
+
+/**
+ * Dynamically generate poll content.
+ *
+ * @param type - The type or identifier of the poll
+ * @param customContent - An object containing custom content details (e.g., question, options, etc.)
+ */
+export const dynamicPollContentGenerator = (
+  type: string,
+  customContent?: Partial<PollContent>
+): PollContent => {
+  switch (type) {
+    case "quiz":
+      return {
+        question:
+          customContent?.question || "Default Quiz Question: What is 2 + 2?",
+        options: customContent?.options || [
+          { text: "1" },
+          { text: "2" },
+          { text: "3" },
+          { text: "4" },
+        ],
+        isQuiz: true,
+        correctOptionIndex: customContent?.correctOptionIndex || 3,
+      };
+    case "daily":
+      return {
+        question:
+          customContent?.question ||
+          "Default Daily Poll: What is your favorite fruit?",
+        options: customContent?.options || [
+          { text: "Apple" },
+          { text: "Banana" },
+          { text: "Cherry" },
+          { text: "Grapes" },
+        ],
+      };
+    case "weekly":
+      return {
+        question:
+          customContent?.question ||
+          "Default Weekly Poll: What is the best day of the week?",
+        options: customContent?.options || [
+          { text: "Monday" },
+          { text: "Friday" },
+          { text: "Sunday" },
+        ],
+      };
+    default:
+      return {
+        question: customContent?.question || "Default Poll: Choose your option",
+        options: customContent?.options || [
+          { text: "Option A" },
+          { text: "Option B" },
+        ],
+      };
+  }
+};
+
+/**
+ * Setup poll schedulers.
+ */
+export const setupPollSchedulers = async () => {
+  try {
+    for (const pollConfig of pollConfigurations) {
+      const { type, schedule, duration, timeZone, content } = pollConfig as {
+        type: PollType;
+        schedule: string;
+        duration?: number;
+        timeZone?: string;
+        content?: Partial<PollContent>;
+      };
+
+      await startPollScheduler(bot, type, schedule, duration, timeZone, () =>
+        dynamicPollContentGenerator(type, content)
+      );
+
+      const humanReadableSchedule = cronToHumanReadable(schedule);
+
+      console.log(
+        `Poll of type '${type}' scheduled at '${humanReadableSchedule}'`
+      );
+    }
+  } catch (error) {
+    console.error("Failed to set up poll schedulers:", error);
+  }
 };

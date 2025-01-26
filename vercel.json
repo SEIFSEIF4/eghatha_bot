@@ -1,5 +1,14 @@
 {
-  "outputDirectory": ".",
-  "installCommand": "npm i --omit=dev",
-  "buildCommand": "npx ts-node scripts/build.ts"
+  "builds": [
+    {
+      "src": "src/api/webhook.ts",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/webhook",
+      "dest": "src/api/webhook.ts"
+    }
+  ]
 }

@@ -11,7 +11,8 @@
     "noEmit": true,
     "paths": {
       "@/*": ["./src/*"],
-      "@/helpers/*": ["./src/helpers/*"]
+      "@/helpers/*": ["./src/helpers/*"],
+      "@/images/*": ["./src/public/images/*"]
     }
   },
   "include": ["src/**/*"],
