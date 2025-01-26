@@ -5,7 +5,7 @@ export const HijriDate: string = getHijriDate();
 export const pollConfigurations = [
   {
     type: "custom",
-    schedule: "0/2 * * * *",
+    schedule: "* * * * *",
     duration: 1 * 60 * 1000, // 1 minutes
     timeZone: "Europe/Istanbul",
     content: {
