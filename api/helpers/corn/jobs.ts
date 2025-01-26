@@ -4,7 +4,7 @@ import { cronToHumanReadable } from "./cronToHumanReadable.js";
 import { pollConfigurations } from "../pollContent.js";
 import { bot } from "../../bot";
 
-const { CHANNEL_USERNAME = "-1002313808274" } = process.env;
+const CHANNEL_USERNAME = "-1002313808274";
 
 // Poll Scheduler Manager
 const pollSchedulers: { [key: string]: ScheduledTask[] } = {};
