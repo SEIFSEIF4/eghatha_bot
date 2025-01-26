@@ -4,6 +4,23 @@ export const HijriDate: string = getHijriDate();
 
 export const pollConfigurations = [
   {
+    type: "custom",
+    schedule: "0/2 * * * *",
+    duration: 1 * 60 * 1000, // 1 minutes
+    timeZone: "Europe/Istanbul",
+    content: {
+      question: `اختبار:\n${HijriDate}`,
+      options: [
+        { text: "الصلاة 5 فرائض" },
+        { text: "صلاة النوافل (6 ركات على الاقل)" },
+        { text: "الصلاة على النبي" },
+        { text: "أذكار الصباح و المساء" },
+        { text: "ورد القران" },
+        { text: "الضحى" },
+      ],
+    },
+  },
+  {
     type: "daily",
     schedule: "0 21 * * *", // Every day at 9 PM
     duration: 24 * 60 * 60 * 100, // 1 day
