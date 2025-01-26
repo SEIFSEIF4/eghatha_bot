@@ -2,7 +2,7 @@
   "functions": {
     "api/**/*.ts": {
       "memory": 1024,
-      "maxDuration": 30
+      "maxDuration": 60
     }
   },
   "crons": [
