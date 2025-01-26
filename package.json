@@ -5,7 +5,6 @@
   "scripts": {
     "start": "nodemon --exec tsx src/api/bot.ts"
   },
-  "type": "module",
   "keywords": [],
   "author": "",
   "dependencies": {
