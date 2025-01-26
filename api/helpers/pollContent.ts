@@ -6,6 +6,7 @@ export const pollConfigurations = [
   {
     type: "daily",
     schedule: "0 21 * * *", // Every day at 9 PM
+    duration: 24 * 60 * 60 * 100, // 1 day
     timeZone: "Europe/Istanbul",
     content: {
       question: `المتابعة اليومية:\n${HijriDate}`,
@@ -19,21 +20,20 @@ export const pollConfigurations = [
       ],
     },
   },
+  {
+    type: "weekly",
+    schedule: "0 21 * * 5", // Every Friday at 9 PM
+    duration: 7 * 24 * 60 * 60 * 100, // 7 days
+    timeZone: "Europe/Istanbul",
+    content: {
+      question: `المتابعة الأسبوعية:\n${HijriDate}`,
+      options: [
+        { text: "صيام اثنين وخميس" },
+        { text: "و سنن الجمعة الكهف" },
+        { text: "صلة الرحم" },
+        { text: "(ربع على الاقل) ورد القران" },
+        { text: "الصدقة" },
+      ],
+    },
+  },
 ];
-
-// {
-//   type: "weekly",
-//   schedule: "0 21 * * 5", // Every Friday at 9 PM
-//   duration: 7 * 24 * 60 * 60 * 100, // 7 days
-//   timeZone: "Europe/Istanbul",
-//   content: {
-//     question: `المتابعة الأسبوعية:\n${HijriDate}`,
-//     options: [
-//       { text: "صيام اثنين وخميس" },
-//       { text: "و سنن الجمعة الكهف" },
-//       { text: "صلة الرحم" },
-//       { text: "(ربع على الاقل) ورد القران" },
-//       { text: "الصدقة" },
-//     ],
-//   },
-// },
