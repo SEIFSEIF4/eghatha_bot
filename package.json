@@ -5,7 +5,7 @@
   "scripts": {
     "start": "nodemon --exec tsx src/bot.ts",
     "build": "tsc && npx tsx scripts/build.ts",
-    "vercel-build": "npm run build"
+    "vercel-build": "npm install && npm run build"
   },
   "type": "module",
   "keywords": [],
