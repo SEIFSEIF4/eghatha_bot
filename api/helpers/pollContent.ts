@@ -1,4 +1,4 @@
-import { getHijriDate } from "@/helpers/getHijriDate.ts";
+import { getHijriDate } from "./getHijriDate";
 
 export const HijriDate: string = getHijriDate();
 

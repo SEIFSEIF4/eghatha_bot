@@ -1,5 +1,8 @@
 {
-  "outputDirectory": ".",
-  "installCommand": "npm install",
-  "buildCommand": "npm run build"
+  "functions": {
+    "api/bot.ts": {
+      "memory": 1024,
+      "maxDuration": 10
+    }
+  }
 }

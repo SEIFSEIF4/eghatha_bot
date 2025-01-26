@@ -5,16 +5,11 @@
     "moduleResolution": "node",
     "esModuleInterop": true,
     "strict": true,
-    "outDir": "./dist",
-    "rootDir": "./src",
-    "allowImportingTsExtensions": true,
-    "noEmit": true,
-    "paths": {
-      "@/*": ["./src/*"],
-      "@/helpers/*": ["./src/helpers/*"],
-      "@/images/*": ["./src/public/images/*"]
-    }
+    "rootDir": "./",
+    "outDir": "./build",
+    "skipLibCheck": true,
+    "resolveJsonModule": true
   },
-  "include": ["src/**/*"],
+  "include": ["api/**/*", "helpers/**/*", "scripts/**/*", "temp.ts"],
   "exclude": ["node_modules"]
 }

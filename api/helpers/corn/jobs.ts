@@ -1,8 +1,8 @@
 import { Bot, GrammyError } from "grammy";
 import cron, { ScheduledTask } from "node-cron";
-import { cronToHumanReadable } from "./cronToHumanReadable.ts";
-import { pollConfigurations } from "@/pollContent.ts";
-import { bot } from "@/bot.ts";
+import { cronToHumanReadable } from "./cronToHumanReadable.js";
+import { pollConfigurations } from "../pollContent.js";
+import { bot } from "../../bot";
 
 const { CHANNEL_USERNAME = "-1002313808274" } = process.env;
 

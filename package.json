@@ -3,21 +3,21 @@
   "version": "1.0.0",
   "main": "src/bot.ts",
   "scripts": {
-    "start": "nodemon --exec tsx src/bot.ts",
-    "build": "tsc"
+    "start": "nodemon --exec tsx src/api/bot.ts"
   },
   "type": "module",
   "keywords": [],
   "author": "",
   "dependencies": {
+    "@vercel/node": "^5.0.2",
     "cron-parser": "^4.9.0",
     "dotenv": "^16.4.7",
     "grammy": "^1.34.0",
     "hijri-converter": "^1.1.1",
     "node-cron": "^3.0.3",
     "nodemon": "^3.1.9",
-    "typescript": "^5.7.3",
-    "tsx": "^4.19.2"
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3"
   },
   "devDependencies": {
     "@types/node": "^22.10.10",
