@@ -33,8 +33,10 @@ export const bot = new Bot(token);
 //     await ctx.api.sendMessage(chatId, "Settings message");
 //   });
 
-//   await setupPollSchedulers();
+// await setupPollSchedulers();
 // };
+
+setupPollSchedulers();
 
 bot.on("message", (ctx) => ctx.reply("Got another message!"));
 
