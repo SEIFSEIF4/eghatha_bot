@@ -22,6 +22,7 @@
   "devDependencies": {
     "@types/node": "^22.10.10",
     "@types/node-cron": "^3.0.11",
+    "@types/node-fetch": "2.x",
     "tsx": "^4.19.2"
   }
 }
