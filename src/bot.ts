@@ -10,6 +10,20 @@ if (!token) {
 
 export const bot = new Bot(token);
 
+await bot.api.setMyCommands([
+  { command: "start", description: "Start the bot" },
+  { command: "help", description: "Show help text" },
+  { command: "settings", description: "Open settings" },
+]);
+
+bot.on("message", async (ctx) => {
+  if (ctx.message?.text === "/start") {
+    const chatId = ctx.chat.id;
+    console.log(`Your Chat ID is: ${chatId}`);
+    await ctx.reply(`Your Chat ID is: ${chatId}`);
+  }
+});
+
 (async () => {
   try {
     console.log("Bot starting...");
