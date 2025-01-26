@@ -282,6 +282,7 @@ export const setupPollSchedulers = async () => {
         content?: Partial<PollContent>;
       };
 
+      // Ensure `startPollScheduler` function is correctly defined and returns a promise
       await startPollScheduler(bot, type, schedule, duration, timeZone, () =>
         dynamicPollContentGenerator(type, content)
       );

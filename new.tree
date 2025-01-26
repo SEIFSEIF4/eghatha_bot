@@ -22,9 +22,9 @@
 │    ├── masaa.jpg
 │    └── saba7.jpg
 ├── global.d.ts
+├── new.tree
 ├── package.json
 ├── pnpm-lock.yaml
-├── temp.ts
 ├── todo.md
 ├── tsconfig.json
 └── vercel.json

@@ -4,5 +4,12 @@
       "memory": 1024,
       "maxDuration": 10
     }
-  }
+  },
+  "crons": [
+    {
+      "path": "/api/cron",
+      "schedule": "44 6 * * *",
+      "maxDuration": 30
+    }
+  ]
 }
