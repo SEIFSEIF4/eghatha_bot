@@ -1,6 +1,6 @@
 import "dotenv/config";
 import { Bot, webhookCallback } from "grammy";
-import { setupPollSchedulers } from "./helpers/corn";
+import { setupPollSchedulers } from "./helpers/corn/jobs";
 
 const token = process.env.BOT_TOKEN;
 let initialized = false;
