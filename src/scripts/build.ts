@@ -1,9 +1,19 @@
-import { bot } from "../bot.ts";
+import { bot } from "@/bot.ts";
 
-const {
-  VERCEL_URL: host,
-  // set your webhook address or use default Vercel deployment url
-  WEBHOOK: webhook = `https://${host}/api/webhook`,
-} = process.env;
+const { VERCEL_URL: host, WEBHOOK: webhook = `https://${host}/api/webhook` } =
+  process.env;
 
-void bot.api.setWebhook(webhook);
+if (!webhook) {
+  throw new Error("WEBHOOK environment variable is required");
+}
+
+(async () => {
+  try {
+    console.log(`Setting webhook to: ${webhook}`);
+    await bot.api.setWebhook(webhook);
+    console.log("Webhook set successfully.");
+  } catch (error) {
+    console.error("Failed to set webhook:", error);
+    process.exit(1);
+  }
+})();

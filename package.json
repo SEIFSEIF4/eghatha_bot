@@ -4,8 +4,7 @@
   "main": "src/bot.ts",
   "scripts": {
     "start": "nodemon --exec tsx src/bot.ts",
-    "build": "tsc && npx tsx scripts/build.ts",
-    "vercel-build": "npm install && npm run build"
+    "build": "tsc"
   },
   "type": "module",
   "keywords": [],
@@ -17,7 +16,8 @@
     "hijri-converter": "^1.1.1",
     "node-cron": "^3.0.3",
     "nodemon": "^3.1.9",
-    "typescript": "^5.7.3"
+    "typescript": "^5.7.3",
+    "tsx": "^4.19.2"
   },
   "devDependencies": {
     "@types/node": "^22.10.10",

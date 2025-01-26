@@ -69,3 +69,4 @@ babel-dist
 
 # END: Project files
 temp.ts
+.vercel
