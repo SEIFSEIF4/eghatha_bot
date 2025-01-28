@@ -15,10 +15,13 @@ Stay organized and productive! ✅
   - [x] weekly poll
   - [x] custom poll
 
-- [ ] **Host Bot On vercel**  
-       _Description:_ Host Bot On vercel using serverless function.  
+- [x] **Host Bot On Cloudflare**  
+       _Description:_ Host Bot On Cloudflare.  
        _Deadline:_ 2025-1-30  
-       _Notes:_ vercel or any free hosting service.
+       _Notes:_  
+       ✅ Free Tier: 100,000 requests/day + 1,000 cron executions/month  
+       ✅ Node.js Support: Works with TypeScript via wrangler CLI  
+       ✅ Cron Jobs: Native cron trigger support (up to 1/hour frequency)
 
 ---
 
@@ -32,6 +35,14 @@ Stay organized and productive! ✅
        _Description:_ dynamically Modify Content of Poll.  
        _Deadline:_ 2025-1-25
 
+- [ ] Enhance Bot Functionality to Support Multi-Channel/Group Messaging
+      _Description:_ dynamically Make bot be able to send to more than one channel or group using their ID.  
+       _Deadline:_ 2025-1-29
+
+- [ ] Subscription Feature Implementation
+      _Description:_ Allow users to subscribe for a variety of features, such as polls and reminders.  
+       _Deadline:_ 2025-2-2
+
 ---
 
 ## 💤 Low Priority
@@ -44,8 +55,21 @@ Stay organized and productive! ✅
        _Description:_ Show day, week and month in hijri date.  
        _Deadline:_ Optional
 
+- [ ] Add more commands
+      _Description:_ Add more commands Like help, support, info and about.  
+       _Deadline:_ Optional
+
+- [ ] Create a UI for Bot Setting
+      _Description:_ Create a website or mobile app to user to change Bot Setting.  
+       _Deadline:_ Optional
+
+- [ ] Include a Tutorial Video
+      _Description:_ Include a Tutorial Video on one of the commands for hosting bot on User Server.  
+       _Deadline:_ Optional
+
 ---
 
 ## 📅 Completed
 
-- [x] overall Polls - _Finished on 2025-1-25_
+- [x] Overall Polls - _Finished on 2025-1-25_
+- [ ] Remainders - _Finished on 2025-1-25_
