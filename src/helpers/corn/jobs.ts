@@ -2,7 +2,6 @@ import { Bot, GrammyError } from "grammy";
 import cron, { ScheduledTask } from "node-cron";
 import { cronToHumanReadable } from "./cronToHumanReadable.js";
 import { pollConfigurations } from "../pollContent.js";
-import { bot } from "../../bot";
 
 const CHANNEL_USERNAME = "-1002313808274";
 
@@ -271,7 +270,7 @@ export const dynamicPollContentGenerator = (
 /**
  * Setup poll schedulers.
  */
-export const setupPollSchedulers = async () => {
+export const setupPollSchedulers = async (bot: Bot) => {
   try {
     for (const pollConfig of pollConfigurations) {
       const { type, schedule, duration, timeZone, content } = pollConfig as {

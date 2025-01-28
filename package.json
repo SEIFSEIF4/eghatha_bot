@@ -3,11 +3,16 @@
   "version": "1.0.0",
   "main": "src/bot.ts",
   "scripts": {
-    "start": "nodemon --exec tsx src/api/bot.ts"
+    "start": "nodemon --exec tsx src/api/bot.ts",
+    "dev": "wrangler dev --local",
+    "test-cron": "curl -X POST http://localhost:8787/test-cron",
+    "test-poll": "curl -X POST http://localhost:8787/test-poll",
+    "tail-logs": "wrangler tail --format pretty"
   },
   "keywords": [],
   "author": "",
   "dependencies": {
+    "@cloudflare/workers-types": "^4.20250124.3",
     "@vercel/node": "^5.0.2",
     "cron-parser": "^4.9.0",
     "dotenv": "^16.4.7",
@@ -16,7 +21,8 @@
     "node-cron": "^3.0.3",
     "nodemon": "^3.1.9",
     "tsx": "^4.19.2",
-    "typescript": "^5.7.3"
+    "typescript": "^5.7.3",
+    "wrangler": "^3.105.1"
   },
   "devDependencies": {
     "@types/node": "^22.10.10",

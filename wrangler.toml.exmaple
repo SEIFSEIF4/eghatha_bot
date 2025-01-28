@@ -1,0 +1,18 @@
+name = "telegram-eghatha-bot"
+main = "src/index.ts"
+compatibility_date = "2024-03-25"
+
+[triggers]
+crons = [
+  "0 21 * * *",     # Daily poll
+  "0 21 * * 5"      # Weekly poll
+]
+
+[vars]
+BOT_TOKEN = ""
+CHANNEL_ID = ""
+
+[[kv_namespaces]]
+binding = "POLL_STORE"
+id = ""
+preview_id = ""
