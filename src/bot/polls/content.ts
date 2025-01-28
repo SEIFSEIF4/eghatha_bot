@@ -13,6 +13,7 @@ export const pollConfigurations: {
   type: PollType;
   content: PollContent;
   duration?: number;
+  timeZone?: string;
 }[] = [
   // {
   //   type: "custom",
@@ -27,6 +28,7 @@ export const pollConfigurations: {
   // },
   {
     type: "daily",
+    timeZone: "Europe/Istanbul",
     content: {
       question: `المتابعة اليومية:\n${getHijriDate()}`,
       options: [
@@ -42,15 +44,15 @@ export const pollConfigurations: {
   },
   {
     type: "weekly",
+    timeZone: "Europe/Istanbul",
     content: {
       question: `المتابعة الأسبوعية:\n${getHijriDate()}`,
       options: [
-        { text: "الصلاة 5 فرائض" },
-        { text: "صلاة النوافل (6 ركات على الاقل)" },
-        { text: "الصلاة على النبي" },
-        { text: "أذكار الصباح و المساء" },
-        { text: "ورد القران" },
-        { text: "الضحى" },
+        { text: "صيام اثنين وخميس" },
+        { text: "و سنن الجمعة الكهف" },
+        { text: "صلة الرحم" },
+        { text: "(حزئين على الاقل) ورد القران" },
+        { text: "الصدقة" },
       ],
       duration: 7 * 24 * 3600 * 1000, // ill expire after 1 week
     },
