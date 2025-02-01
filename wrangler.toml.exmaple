@@ -9,10 +9,16 @@ crons = [
 ]
 
 [vars]
-BOT_TOKEN = ""
+ADMIN_ID = ""
 CHANNEL_ID = ""
+BOT_TOKEN = ""
 
 [[kv_namespaces]]
 binding = "POLL_STORE"
+id = ""
+preview_id = ""
+
+[[kv_namespaces]]
+binding = "SUBSCRIBED_CHATS_STORE"
 id = ""
 preview_id = ""

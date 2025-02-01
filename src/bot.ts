@@ -1,31 +1,35 @@
 import { Bot } from "grammy";
+import { Env } from "@/types";
 
-export function createBot(token: string) {
+// Bot
+import { setupCommands } from "./bot/commands";
+import { handleSubscription } from "./bot/polls/scheduler";
+
+export function createBot(token: string, env: Env) {
   const bot = new Bot(token);
 
-  bot.api.setMyCommands([
-    { command: "start", description: "Start the bot" },
-    { command: "help", description: "Show help text" },
-    { command: "settings", description: "Open settings" },
-  ]);
+  // Attach env to context
+  bot.use(async (ctx, next) => {
+    (ctx as any).env = env;
+    await next();
+  });
 
   bot.catch((err) => {
     console.error("Bot error:", err);
   });
 
-  bot.command("start", async (ctx) => {
-    await ctx.reply("مرحبا! البوت يعمل بنجاح 🎉");
-  });
+  // Commands Setup ✅
+  setupCommands(bot, env);
 
-  bot.command("help", async (ctx) => {
-    await ctx.reply("🏓 Pong!");
-  });
+  // Register Subscription ✅
+  handleSubscription(bot, env);
 
   return bot;
 }
 
-export async function handleUpdate(bot: Bot, update: any) {
+export async function handleUpdate(bot: Bot, update: any, env: Env) {
   try {
+    (bot as any).env = env;
     await bot.handleUpdate(update);
   } catch (error) {
     console.error("Update handling failed:", error);

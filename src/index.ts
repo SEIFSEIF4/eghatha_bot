@@ -4,7 +4,7 @@ import { createBot, handleUpdate } from "./bot";
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
-    const bot = createBot(env.BOT_TOKEN);
+    const bot = createBot(env.BOT_TOKEN, env);
     await bot.init();
 
     try {
@@ -13,7 +13,7 @@ export default {
         const update = await request.json();
         console.log("Received update:", JSON.stringify(update, null, 2));
 
-        await handleUpdate(bot, update);
+        await handleUpdate(bot, update, env);
         await checkExpiredPolls(bot, env);
 
         return new Response("OK");
@@ -27,7 +27,7 @@ export default {
   },
 
   async scheduled(event: ScheduledEvent, env: Env): Promise<void> {
-    const bot = createBot(env.BOT_TOKEN);
+    const bot = createBot(env.BOT_TOKEN, env);
     const cronType =
       event.cron === "0 18 * * *"
         ? "daily"

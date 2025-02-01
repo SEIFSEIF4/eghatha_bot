@@ -1,6 +1,6 @@
 import { Bot, GrammyError } from "grammy";
 import cron, { ScheduledTask } from "node-cron";
-import { cronToHumanReadable } from "./cronToHumanReadable.js";
+import { cronToHumanReadable } from "./readable-corn.js";
 
 const CHANNEL_USERNAME = "-1002313808274";
 
