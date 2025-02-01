@@ -1,7 +1,6 @@
 import { Bot, GrammyError } from "grammy";
 import cron, { ScheduledTask } from "node-cron";
 import { cronToHumanReadable } from "./cronToHumanReadable.js";
-import { pollConfigurations } from "../pollContent.js";
 
 const CHANNEL_USERNAME = "-1002313808274";
 
@@ -264,35 +263,5 @@ export const dynamicPollContentGenerator = (
           { text: "Option B" },
         ],
       };
-  }
-};
-
-/**
- * Setup poll schedulers.
- */
-export const setupPollSchedulers = async (bot: Bot) => {
-  try {
-    for (const pollConfig of pollConfigurations) {
-      const { type, schedule, duration, timeZone, content } = pollConfig as {
-        type: PollType;
-        schedule: string;
-        duration?: number;
-        timeZone?: string;
-        content?: Partial<PollContent>;
-      };
-
-      // Ensure `startPollScheduler` function is correctly defined and returns a promise
-      await startPollScheduler(bot, type, schedule, duration, timeZone, () =>
-        dynamicPollContentGenerator(type, content)
-      );
-
-      const humanReadableSchedule = cronToHumanReadable(schedule);
-
-      console.log(
-        `Poll of type '${type}' scheduled at '${humanReadableSchedule}'`
-      );
-    }
-  } catch (error) {
-    console.error("Failed to set up poll schedulers:", error);
   }
 };

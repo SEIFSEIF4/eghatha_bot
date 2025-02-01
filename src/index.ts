@@ -1,19 +1,6 @@
-import { Bot } from "grammy";
 import { checkExpiredPolls, setupPollSchedulers } from "./bot/polls/scheduler";
 import type { Env } from "@/types";
 import { createBot, handleUpdate } from "./bot";
-
-async function handleLocalTesting(request: Request, env: Env) {
-  const url = new URL(request.url);
-
-  if (url.pathname === "/test-cron") {
-    await setupPollSchedulers(new Bot(env.BOT_TOKEN), env, "daily");
-    await setupPollSchedulers(new Bot(env.BOT_TOKEN), env, "weekly");
-    return new Response("Test cron executed");
-  }
-
-  return new Response("Not Found", { status: 404 });
-}
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
@@ -42,9 +29,9 @@ export default {
   async scheduled(event: ScheduledEvent, env: Env): Promise<void> {
     const bot = createBot(env.BOT_TOKEN);
     const cronType =
-      event.cron === "0 21 * * *"
+      event.cron === "0 18 * * *"
         ? "daily"
-        : event.cron === "0 21 * * 5"
+        : event.cron === "0 18 * * 5"
         ? "weekly"
         : "custom";
 

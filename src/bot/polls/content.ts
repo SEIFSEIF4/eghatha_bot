@@ -11,25 +11,26 @@ export interface PollContent {
 
 export const pollConfigurations: {
   type: PollType;
-  content: PollContent;
+  content: () => PollContent; // Function to get fresh data
   duration?: number;
   timeZone?: string;
 }[] = [
-  // {
-  //   type: "custom",
-  //   content: {
-  //     question: `المتابعة اليومية:\n${getHijriDate()}`,
-  //     options: [
-  //       { text: "الصلاة 5 فرائض" },
-  //       { text: "صلاة النوافل (6 ركات على الاقل)" },
-  //     ],
-  //     duration: 2 * 60 * 1000,
-  //   },
-  // },
+  {
+    type: "custom",
+    timeZone: "Asia/Riyadh",
+    content: () => ({
+      question: `المتابعة اليومية:\n${getHijriDate()}`,
+      options: [
+        { text: "الصلاة 5 فرائض" },
+        { text: "صلاة النوافل (6 ركات على الاقل)" },
+      ],
+      duration: 2 * 60 * 1000,
+    }),
+  },
   {
     type: "daily",
-    timeZone: "Europe/Istanbul",
-    content: {
+    timeZone: "Asia/Riyadh",
+    content: () => ({
       question: `المتابعة اليومية:\n${getHijriDate()}`,
       options: [
         { text: "الصلاة 5 فرائض" },
@@ -39,13 +40,13 @@ export const pollConfigurations: {
         { text: "ورد القران" },
         { text: "الضحى" },
       ],
-      duration: 24 * 3600 * 1000, // will expire after 1 day
-    },
+      duration: 24 * 3600 * 1000,
+    }),
   },
   {
     type: "weekly",
-    timeZone: "Europe/Istanbul",
-    content: {
+    timeZone: "Asia/Riyadh",
+    content: () => ({
       question: `المتابعة الأسبوعية:\n${getHijriDate()}`,
       options: [
         { text: "صيام اثنين وخميس" },
@@ -54,7 +55,7 @@ export const pollConfigurations: {
         { text: "(حزئين على الاقل) ورد القران" },
         { text: "الصدقة" },
       ],
-      duration: 7 * 24 * 3600 * 1000, // ill expire after 1 week
-    },
+      duration: 7 * 24 * 3600 * 1000,
+    }),
   },
 ];

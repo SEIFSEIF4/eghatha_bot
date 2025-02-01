@@ -1,7 +1,6 @@
 import { Bot } from "grammy";
 import { Env } from "@/types";
-import { PollContent, PollType, pollConfigurations } from "./content";
-import { cronToHumanReadable } from "@/helpers/corn/cronToHumanReadable";
+import { PollType, pollConfigurations } from "./content";
 
 interface ActivePoll {
   messageId: number;
@@ -19,8 +18,14 @@ export async function setupPollSchedulers(bot: Bot, env: Env, type: PollType) {
     ).toISOString()}`
   );
 
+  const content = config.content();
+  const { question, options } = content;
+
+  if (question.length > 300) {
+    throw new Error(`Question exceeds 300 characters (${question.length})`);
+  }
+
   try {
-    const { question, options } = config.content;
     const pollMessage = await bot.api.sendPoll(
       env.CHANNEL_ID,
       question,

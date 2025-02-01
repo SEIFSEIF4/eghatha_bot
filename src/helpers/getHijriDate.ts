@@ -1,51 +1,80 @@
 import { toHijri } from "hijri-converter";
 
-// Arabic day and month mappings
-const ARABIC_DAYS = [
-  "الأحد",
-  "الإثنين",
-  "الثلاثاء",
-  "الأربعاء",
-  "الخميس",
-  "الجمعة",
-  "السبت",
-];
-const ARABIC_MONTHS: { [key: number]: string } = {
-  1: "محرم",
-  2: "صفر",
-  3: "ربيع الأول",
-  4: "ربيع الثاني",
-  5: "جمادى الأولى",
-  6: "جمادى الآخرة",
-  7: "رجب",
-  8: "شعبان",
-  9: "رمضان",
-  10: "شوال",
-  11: "ذو القعدة",
-  12: "ذو الحجة",
-};
+export function getHijriDate(): string {
+  // Get current date in Riyadh timezone, ensuring Gregorian calendar
+  const now = new Date();
+  const options = {
+    timeZone: "Asia/Riyadh",
+    year: "numeric" as "numeric",
+    month: "numeric" as "numeric",
+    day: "numeric" as "numeric",
+    weekday: "long" as "long",
+  };
 
-export function getHijriDate() {
-  const today = new Date();
+  // Force Gregorian calendar extraction
+  const formatter = new Intl.DateTimeFormat("en-US", options);
+  const formattedDate = formatter.formatToParts(now);
 
-  // 1. Get Gregorian date components
-  const gYear = today.getFullYear();
-  const gMonth = today.getMonth() + 1; // JS months are 0-indexed
-  const gDay = today.getDate();
+  console.log("Formatted Parts (Gregorian):", formattedDate);
 
-  // 2. Convert to Hijri
-  const hijriDate = toHijri(gYear, gMonth, gDay);
+  const dayOfWeek = formattedDate.find((p) => p.type === "weekday")?.value;
+  const day = formattedDate.find((p) => p.type === "day")?.value;
+  const month = formattedDate.find((p) => p.type === "month")?.value;
+  const year = formattedDate.find((p) => p.type === "year")?.value;
 
-  // 3. Calculate week of the month
+  console.log("Extracted Gregorian Date:", { dayOfWeek, day, month, year });
+
+  if (!dayOfWeek || !day || !month || !year) {
+    console.error("Error extracting date parts");
+    return "التاريخ الهجري غير متوفر";
+  }
+
+  const gregorianDay = parseInt(day, 10);
+  const gregorianMonth = parseInt(month, 10);
+  const gregorianYear = parseInt(year, 10);
+
+  // Convert to Hijri
+  const hijriDate = toHijri(gregorianYear, gregorianMonth, gregorianDay);
+  console.log("Hijri Conversion Output:", hijriDate);
+
+  if (!hijriDate || isNaN(hijriDate.hd) || isNaN(hijriDate.hm)) {
+    console.error("Invalid Hijri conversion");
+    return "التاريخ الهجري غير متوفر";
+  }
+
+  // Week calculation
   const weekNumber = Math.ceil(hijriDate.hd / 7);
 
-  // 4. Get Arabic day name
-  const dayOfWeek = today.getDay(); // 0 (Sunday) to 6 (Saturday)
-  const arabicDay = ARABIC_DAYS[dayOfWeek];
+  // Hijri Month Names
+  const hijriMonthNames = [
+    "محرم",
+    "صفر",
+    "ربيع الأول",
+    "ربيع الآخر",
+    "جمادى الأولى",
+    "جمادى الآخرة",
+    "رجب",
+    "شعبان",
+    "رمضان",
+    "شوال",
+    "ذو القعدة",
+    "ذو الحجة",
+  ];
 
-  // 5. Get Arabic month name
-  const arabicMonth = ARABIC_MONTHS[hijriDate.hm];
+  const hijriMonthName = hijriMonthNames[hijriDate.hm - 1] || "غير معروف";
 
-  // 6. Format the output
-  return `${arabicDay} - الاسبوع #${weekNumber} من شهر ${arabicMonth}`;
+  // Map English weekday to Arabic
+  const dayOfWeekMap: { [key: string]: string } = {
+    Sunday: "الأحد",
+    Monday: "الاثنين",
+    Tuesday: "الثلاثاء",
+    Wednesday: "الأربعاء",
+    Thursday: "الخميس",
+    Friday: "الجمعة",
+    Saturday: "السبت",
+  };
+
+  const arabicDayOfWeek = dayOfWeekMap[dayOfWeek] || "غير معروف";
+
+  return `${arabicDayOfWeek} - الأسبوع #${weekNumber} من شهر ${hijriMonthName}`;
 }
