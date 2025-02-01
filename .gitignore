@@ -58,8 +58,6 @@ typings/
 .env
 env*
 .dev.vars
-wrangler.toml
-.wrangler
 
 
 # START: Project files
