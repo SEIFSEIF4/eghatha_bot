@@ -1,6 +1,7 @@
 import { Bot, GrammyError } from "grammy";
 import cron, { ScheduledTask } from "node-cron";
 import { cronToHumanReadable } from "./readable-corn.js";
+import { PollType } from "@/types.js";
 
 const CHANNEL_USERNAME = "-1002313808274";
 
@@ -8,7 +9,6 @@ const CHANNEL_USERNAME = "-1002313808274";
 const pollSchedulers: { [key: string]: ScheduledTask[] } = {};
 const activePolls = new Map<string, ActivePoll[]>();
 
-type PollType = "daily" | "weekly" | "quiz" | "custom";
 type ActivePoll = {
   messageId: number;
   timer: NodeJS.Timeout;

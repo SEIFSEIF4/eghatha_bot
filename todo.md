@@ -43,6 +43,10 @@ Stay organized and productive! ✅
       _Description:_ Allow users to subscribe for a variety of features, such as polls and reminders.  
        _Deadline:_ 2025-2-2
 
+- [ ] Remainders Single Users
+      _Description:_ Remainder Single User to be active on Private DM.  
+       _Deadline:_ 2025-2-10
+
 ---
 
 ## 💤 Low Priority
@@ -61,6 +65,14 @@ Stay organized and productive! ✅
 
 - [x] Create a ~UI~ Commands list for Bot Setting
       _Description:_ Create a ~website or mobile app~ Commands list to user to change Bot Setting.  
+       _Deadline:_ Optional
+
+- [ ] Make Poll Not anonymous
+      _Description:_ Make Poll Not is anonymous and show poll result.  
+       _Deadline:_ Optional
+
+- [ ] Add Poll link
+      _Description:_ Add Poll link to user in private Dm and handle public and private groups.  
        _Deadline:_ Optional
 
 - [ ] Include a Tutorial Video

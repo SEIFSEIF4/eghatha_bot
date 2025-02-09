@@ -3,7 +3,6 @@ import { Env } from "@/types";
 
 // Bot
 import { setupCommands } from "./bot/commands";
-import { handleSubscription } from "./bot/polls/scheduler";
 
 export function createBot(token: string, env: Env) {
   const bot = new Bot(token);
@@ -20,9 +19,6 @@ export function createBot(token: string, env: Env) {
 
   // Commands Setup ✅
   setupCommands(bot, env);
-
-  // Register Subscription ✅
-  handleSubscription(bot, env);
 
   return bot;
 }

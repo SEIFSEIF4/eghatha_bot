@@ -1,5 +1,8 @@
-import { checkExpiredPolls, setupPollSchedulers } from "./bot/polls/scheduler";
-import type { Env } from "@/types";
+import {
+  setupPollSchedulers,
+  checkRemindersAndExpiredPolls,
+} from "./bot/polls/scheduler";
+import type { Env, PollType } from "@/types";
 import { createBot, handleUpdate } from "./bot";
 
 export default {
@@ -14,7 +17,7 @@ export default {
         console.log("Received update:", JSON.stringify(update, null, 2));
 
         await handleUpdate(bot, update, env);
-        await checkExpiredPolls(bot, env);
+        // await checkRemindersAndExpiredPolls(bot, env);
 
         return new Response("OK");
       }
@@ -33,9 +36,18 @@ export default {
         ? "daily"
         : event.cron === "0 18 * * 5"
         ? "weekly"
+        : event.cron === "* * * * *"
+        ? "warning"
         : "custom";
 
     console.log(`Running cron job: ${cronType}`);
-    await setupPollSchedulers(bot, env, cronType);
+
+    if (cronType === "warning") {
+      // ✅ Only check reminders & expired polls (DO NOT send new polls)
+      await checkRemindersAndExpiredPolls(bot, env);
+    } else {
+      // ✅ Send scheduled polls
+      await setupPollSchedulers(bot, env, cronType as PollType);
+    }
   },
 };

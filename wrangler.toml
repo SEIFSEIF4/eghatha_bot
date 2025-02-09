@@ -4,9 +4,11 @@ compatibility_date = "2024-03-25"
 
 [triggers]
 crons = [
-  "0 18 * * *",    # Daily polls (18:00 UTC = 00:00 Riyadh)
-  "0 18 * * 5",    # Weekly polls (Friday 18:00 UTC)
+  "* * * * *",     # ✅ Only warnings (NO polls)
+  "0 18 * * *",    # ✅ Daily polls at 18:00 UTC (00:00 Riyadh)
+  "0 18 * * 5",    # ✅ Weekly polls on Friday at 18:00 UTC
 ]
+
 
 [vars]
 ADMIN_ID = "1406308261"

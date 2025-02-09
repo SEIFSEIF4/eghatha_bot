@@ -1,12 +1,11 @@
 import { getHijriDate } from "@/helpers/getHijriDate";
-
-export type PollType = "daily" | "weekly" | "custom";
+import { PollType } from "@/types";
 
 export interface PollContent {
   question: string;
-  // Enforce minimum 2 text options required for telegram poll
   options: [{ text: string }, { text: string }, ...{ text: string }[]];
   duration: number;
+  warning?: number; // ⬅️ New optional warning time before poll ends
 }
 
 export const pollConfigurations: {
@@ -24,7 +23,8 @@ export const pollConfigurations: {
         { text: "الصلاة 5 فرائض" },
         { text: "صلاة النوافل (6 ركات على الاقل)" },
       ],
-      duration: 2 * 60 * 1000,
+      duration: 2 * 60 * 1000, // 2 minutes
+      warning: 1 * 60 * 1000, // ⬅️ 1 minute before poll ends
     }),
   },
   {
@@ -34,13 +34,15 @@ export const pollConfigurations: {
       question: `المتابعة اليومية:\n${getHijriDate()}`,
       options: [
         { text: "الصلاة 5 فرائض" },
+        { text: "الأذكار بعد الصلاة المفروضة" },
         { text: "صلاة النوافل (6 ركات على الاقل)" },
         { text: "الصلاة على النبي" },
         { text: "أذكار الصباح و المساء" },
         { text: "ورد القران" },
         { text: "الضحى" },
       ],
-      duration: 24 * 3600 * 1000,
+      duration: 24 * 3600 * 1000, // 24 hours
+      warning: 1 * 3600 * 1000, // ⬅️ 1 hour before poll ends
     }),
   },
   {
@@ -55,7 +57,8 @@ export const pollConfigurations: {
         { text: "(حزئين على الاقل) ورد القران" },
         { text: "الصدقة" },
       ],
-      duration: 7 * 24 * 3600 * 1000,
+      duration: 7 * 24 * 3600 * 1000, // 7 days
+      warning: 3 * 3600 * 1000, // ⬅️ 3 hours before poll ends
     }),
   },
 ];
