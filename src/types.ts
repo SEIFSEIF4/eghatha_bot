@@ -13,6 +13,8 @@ export interface Env {
   ADMIN_ID: string;
 }
 
+export type PollType = "daily" | "weekly" | "quiz" | "custom" | "warning";
+
 declare global {
   function getMiniflareBindings(): Env;
 }

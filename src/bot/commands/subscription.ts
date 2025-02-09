@@ -1,48 +1,120 @@
-import { Bot, Context } from "grammy";
+import { Bot, Context, InlineKeyboard } from "grammy";
 import { Env } from "@/types";
 
+// List of available features
+const FEATURES = {
+  polls: "استطلاعات الرأي",
+  alerts: "التنبيهات",
+  news: "الأخبار",
+};
+
 export function setupSubscriptionCommands(bot: Bot, env: Env) {
-  bot.command(["subscribe", "subscribe@eghatha_bot"], async (ctx: Context) => {
+  bot.command("subscription", async (ctx: Context) => {
+    const keyboard = new InlineKeyboard();
+
+    for (const [featureKey, featureName] of Object.entries(FEATURES)) {
+      const isSubscribed = await isFeatureSubscribed(ctx, featureKey);
+      keyboard
+        .text(
+          `${!isSubscribed ? "❌" : "✅"} ${featureName}`,
+          `toggle_${featureKey}`
+        )
+        .row();
+    }
+
+    await ctx.reply("🛎️ *تم تنفيذ طلبك*", {
+      parse_mode: "Markdown",
+      reply_markup: keyboard,
+    });
+  });
+
+  // Handle inline keyboard interactions
+  bot.callbackQuery(/^toggle_(\w+)$/, async (ctx) => {
+    const featureKey = ctx.match![1];
+    const chatId = ctx.chat?.id.toString();
+
+    if (!chatId)
+      return ctx.answerCallbackQuery("❌ خطأ في التعرف على المحادثة");
+    if (!FEATURES[featureKey as keyof typeof FEATURES]) {
+      return ctx.answerCallbackQuery("❌ ميزة غير معروفة");
+    }
+
+    try {
+      const newStatus = await toggleSubscription(
+        chatId,
+        featureKey,
+        (ctx as any).env
+      );
+      const featureName = FEATURES[featureKey as keyof typeof FEATURES];
+
+      await ctx.answerCallbackQuery(
+        `${
+          newStatus ? "✅ مشترك الآن في" : "❌ ألغي الاشتراك من"
+        } ${featureName}`
+      );
+
+      // Update the message keyboard
+      await ctx.editMessageReplyMarkup({
+        reply_markup: createUpdatedKeyboard(chatId, (ctx as any).env),
+      });
+    } catch (error) {
+      console.error("Subscription error:", error);
+      ctx.answerCallbackQuery("❌ فشل في تحديث الاشتراك");
+    }
+  });
+
+  // Help command
+  bot.command("subscribe_help", async (ctx) => {
     await ctx.reply(
-      "📝 *الميزات المتاحة للاشتراك:*\n\n" +
-        "📊 /subscribe polls - الاشتراك في استطلاعات الرأي\n" +
-        "🚨 /subscribe alerts - الاشتراك في التنبيهات\n\n" +
-        "🚫 *للإلغاء:* \n" +
-        "❌ /unsubscribe polls\n" +
-        "❌ /unsubscribe alerts\n\n" +
-        "📌 استخدم الأمر المناسب للاشتراك أو الإلغاء.",
+      "🌟 *كيفية استخدام نظام الاشتراكات:*\n\n" +
+        "استخدم الأمر /subscription لعرض لوحة التحكم بالاشتراكات\n" +
+        "اضغط على الأزرار لتبديل حالة الاشتراك\n\n" +
+        "💡 يمكنك تحديث تفضيلاتك في أي وقت!",
       { parse_mode: "Markdown" }
     );
   });
+}
 
-  bot.command(["subscribe", "unsubscribe"], async (ctx: Context) => {
-    if (!ctx.chat) return ctx.reply("❌ لا يمكن العثور على معلومات الدردشة.");
+// Helper functions
+async function isFeatureSubscribed(
+  ctx: Context,
+  featureKey: string
+): Promise<boolean> {
+  if (!ctx.chat) return false;
 
-    const chatId = ctx.chat.id.toString();
-    const envStore = (ctx as any).env?.SUBSCRIBED_CHATS_STORE;
-    if (!envStore)
-      return ctx.reply("⚠️ خطأ داخلي: لا يمكن الوصول إلى قاعدة البيانات.");
+  const chatId = ctx.chat.id.toString();
+  const store = (ctx as any).env.SUBSCRIBED_CHATS_STORE;
+  const data = await store.get(chatId);
 
-    const args =
-      ctx.message?.text?.split(" ").slice(1).join(" ").trim().toLowerCase() ??
-      "";
-    if (!["polls", "alerts"].includes(args)) {
-      return ctx.reply(
-        "⚠️ الرجاء تحديد ميزة صحيحة! استخدم `/subscribe` لرؤية القائمة."
-      );
-    }
+  return data ? JSON.parse(data)[featureKey] || false : false;
+}
 
-    const isSubscribing = ctx.message?.text?.startsWith("/subscribe") ?? false;
-    const existingData = await envStore.get(chatId);
-    const subscriptions = existingData ? JSON.parse(existingData) : {};
+async function toggleSubscription(
+  chatId: string,
+  featureKey: string,
+  env: Env
+): Promise<boolean> {
+  const store = env.SUBSCRIBED_CHATS_STORE;
+  const data = await store.get(chatId);
+  const subscriptions = data ? JSON.parse(data) : {};
+  const newStatus = !subscriptions[featureKey];
 
-    subscriptions[args] = isSubscribing;
-    await envStore.put(chatId, JSON.stringify(subscriptions));
+  subscriptions[featureKey] = newStatus;
+  await store.put(chatId, JSON.stringify(subscriptions));
+  return newStatus;
+}
 
-    ctx.reply(
-      isSubscribing
-        ? `✅ تم الاشتراك بنجاح في ميزة: ${args}`
-        : `❌ تم إلغاء الاشتراك من ميزة: ${args}`
-    );
+function createUpdatedKeyboard(chatId: string, env: Env): InlineKeyboard {
+  const keyboard = new InlineKeyboard();
+
+  Object.entries(FEATURES).forEach(([key, name]) => {
+    env.SUBSCRIBED_CHATS_STORE.get(chatId).then((data) => {
+      const isSubscribed = data ? JSON.parse(data)[key] : false;
+      keyboard
+        .text(`${!isSubscribed ? "❌" : "✅"} ${name}`, `toggle_${key}`)
+        .row();
+    });
   });
+
+  return keyboard;
 }
