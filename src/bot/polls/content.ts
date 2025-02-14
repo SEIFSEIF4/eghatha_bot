@@ -22,6 +22,7 @@ export const pollConfigurations: {
       options: [
         { text: "الصلاة 5 فرائض" },
         { text: "صلاة النوافل (6 ركات على الاقل)" },
+        { text: "الاستغفار(70 مره على الاقل)" },
       ],
       duration: 2 * 60 * 1000, // 2 minutes
       warning: 1 * 60 * 1000, // ⬅️ 1 minute before poll ends
@@ -40,6 +41,7 @@ export const pollConfigurations: {
         { text: "أذكار الصباح و المساء" },
         { text: "ورد القران" },
         { text: "الضحى" },
+        { text: "الاستغفار(70 مره على الاقل)" },
       ],
       duration: 24 * 3600 * 1000, // 24 hours
       warning: 1 * 3600 * 1000, // ⬅️ 1 hour before poll ends

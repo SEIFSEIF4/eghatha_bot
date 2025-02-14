@@ -43,9 +43,13 @@ Stay organized and productive! ✅
       _Description:_ Allow users to subscribe for a variety of features, such as polls and reminders.  
        _Deadline:_ 2025-2-2
 
-- [ ] Remainders Single Users
+- [x] Remainders Single Users
       _Description:_ Remainder Single User to be active on Private DM.  
        _Deadline:_ 2025-2-10
+
+- [x] Admins Privileges
+      _Description:_ Make only admins able to change subscription settings.  
+       _Deadline:_ 2025-2-14
 
 ---
 
@@ -67,19 +71,23 @@ Stay organized and productive! ✅
       _Description:_ Create a ~website or mobile app~ Commands list to user to change Bot Setting.  
        _Deadline:_ Optional
 
-- [ ] Make Poll Not anonymous
+- [x] Make Poll Not anonymous
       _Description:_ Make Poll Not is anonymous and show poll result.  
        _Deadline:_ Optional
 
-- [ ] Add Poll link
+- [x] Add Poll link
       _Description:_ Add Poll link to user in private Dm and handle public and private groups.  
+       _Deadline:_ Optional
+
+- [ ] More info on Features
+      _Description:_ Provide more Info and details about each Feature on the bot ie (polls: "استطلاعات الرأي",).  
        _Deadline:_ Optional
 
 - [ ] Include a Tutorial Video
       _Description:_ Include a Tutorial Video on one of the commands for hosting bot on User Server.  
        _Deadline:_ Optional
 
-- [ ] Read Me & GitHup repo
+- [x] Read Me & GitHup repo
       _Description:_ Write a Read Me File and open Contributions.  
        _Deadline:_ Optional
 

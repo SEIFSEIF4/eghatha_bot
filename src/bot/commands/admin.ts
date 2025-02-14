@@ -6,6 +6,11 @@ function isAdmin(ctx: Context, env: Env): boolean {
 }
 
 export function setupAdminCommands(bot: Bot, env: Env) {
+  bot.command("startAdmin", async (ctx) => {
+    if (!isAdmin(ctx, env)) return ctx.reply("❌ لا يمكنك استخدام هذا الأمر.");
+    await ctx.reply("Admin مرحبا! البوت يعمل بنجاح 🎉");
+  });
+
   bot.command("list_all", async (ctx) => {
     if (!isAdmin(ctx, env)) return ctx.reply("❌ لا يمكنك استخدام هذا الأمر.");
 

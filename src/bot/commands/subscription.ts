@@ -10,6 +10,13 @@ const FEATURES = {
 
 export function setupSubscriptionCommands(bot: Bot, env: Env) {
   bot.command("subscription", async (ctx: Context) => {
+    if (!(await isAdmin(ctx))) {
+      return ctx.reply(
+        "❌ *عذرًا، هذا الأمر متاح فقط للمسؤولين*\n\n🔹 لتجربة البوت، يمكنك طلب صلاحية المسؤول من أحد المسؤولين الحاليين، أو تجربته في مجموعة تكون أنت مسؤولًا فيها.",
+        { parse_mode: "Markdown" }
+      );
+    }
+
     const keyboard = new InlineKeyboard();
 
     for (const [featureKey, featureName] of Object.entries(FEATURES)) {
@@ -76,6 +83,7 @@ export function setupSubscriptionCommands(bot: Bot, env: Env) {
 }
 
 // Helper functions
+// 🛡 **Check if the user is Subscribed to specific feature**
 async function isFeatureSubscribed(
   ctx: Context,
   featureKey: string
@@ -117,4 +125,20 @@ function createUpdatedKeyboard(chatId: string, env: Env): InlineKeyboard {
   });
 
   return keyboard;
+}
+
+// 🛡 **Check if the user is an admin**
+async function isAdmin(ctx: Context): Promise<boolean> {
+  if (!ctx.chat || !ctx.from) return false;
+
+  const chatId = ctx.chat.id;
+  const userId = ctx.from.id;
+
+  try {
+    const chatMember = await ctx.api.getChatMember(chatId, userId);
+    return ["administrator", "creator"].includes(chatMember.status);
+  } catch (error) {
+    console.error("Admin check error:", error);
+    return false;
+  }
 }
