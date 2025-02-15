@@ -178,7 +178,7 @@ async function sendReminder(
             `[اضغط هنا للانتقال إلى الاستطلاع](${escapedLink})`;
 
           await bot.api.sendMessage(userId, message, {
-            parse_mode: "HTML",
+            parse_mode: "MarkdownV2",
           });
         } catch (error) {
           console.error(`❌ Failed to send DM to user ${userId}:`, error);
